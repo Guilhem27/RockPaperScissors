@@ -6,35 +6,38 @@ function getComputerChoice() {
     return choice
 }
 
+let wins=0;
+let loses=0;
+let ties=0;
 
 function playRound(playerSelection, computerSelection) {
     const player= playerSelection.toLowerCase();
     if (player== computerSelection) {
-        return `It's a tie! ${player} ties with ${computerSelection}`;
+        return 'tie';
     } else {
         switch (player) {
             case "rock": 
                 if (computerSelection=="paper") {
-                    return `You LOSE! ${computerSelection} beats ${player}`;
+                    return 'lose';
                 } 
                 else {
-                    return `You WIN! ${player} beats ${computerSelection}`;
+                    return 'win';
             }
                 break;
             case "paper": 
                 if (computerSelection=="scissors") {
-                    return `You LOSE! ${computerSelection} beats ${player}`;
+                    return 'lose';
                 } 
                 else {
-                    return `You WIN! ${player} beats ${computerSelection}`;
+                    return 'win';
             }
                 break;
             case "scissors": 
                 if (computerSelection=="rock") {
-                    return `You LOSE! ${computerSelection} beats ${player}`;
+                    return 'lose';
                 } 
                 else {
-                    return `You WIN! ${player} beats ${computerSelection}`;
+                    return 'win';
                 }
                 break;
         }
@@ -43,31 +46,55 @@ function playRound(playerSelection, computerSelection) {
 
 
 
-function game() {
-    let wins=0;
-    let loses=0;
-    for(let i=0;i<5;i++) {
-        const playerSelection= prompt('Please make a choice between the rock, the paper or the scissors.');
-        const computerSelection=getComputerChoice();
-        let result=playRound(playerSelection,computerSelection);
-        console.log(result);
-        if (result.slice(4,6)==`WIN`){
-            wins=wins+1;
-        } 
-        else if (result.slice(4,7)==`LOSE`){
-            loses=loses+1;
-        } 
-    }
-    console.log(count, ties)
-    if (wins>loses){
-        return `You won the GAME! - ${wins} / ${loses} `;
-    }
-    else if (wins<loses){
-        return `You lose the GAME! - ${wins} / ${loses} ` ;
-    }
-    else {
-        return `Equality! - ${wins} / ${loses} `;
-    }
-}
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) =>{
+    button.addEventListener('click', () => {
+        if (wins>=4 && playRound(button.id,getComputerChoice())=='win'){
+            resultGame.textContent=`Congratulations!\nYou win the GAME!!!`;
+            scoreMessage.textContent=`Do you want to play again?`;
+            wins=0;
+            loses=0;
+            ties=0;
+            }
+        else if (loses>=4 && playRound(button.id,getComputerChoice())=='lose'){
+            resultGame.textContent=`You lose the GAME!!!`;
+            scoreMessage.textContent=`Do you want to play again?`;
+            wins=0;
+            loses=0;
+            ties=0;
+            }
+        else if (loses==5 || wins==5){
+            wins=0;
+            loses=0;
+            ties=0;
+        }  
+        else{
+            switch (playRound(button.id,getComputerChoice())){
+                case 'lose':
+                    loses=loses+1;
+                    scoreMessage.textContent=`You lose! ${getComputerChoice()} breaks the ${button.id}!`;
+                    break;
+                case 'win':
+                    wins=wins+1;
+                    scoreMessage.textContent=`You win! ${button.id} breaks the ${getComputerChoice()}!`;
+                    break;
+                case 'tie':
+                    ties=ties+1;
+                    scoreMessage.textContent=`It's a tie! ${button.id} ties the ${getComputerChoice()}!`;
+                    break;
+                };
+            scoreGame.textContent=`${wins}/${loses}`;
+    };
+    console.log(wins,loses);
+    scoreGame.textContent=`${wins}/${loses}`;
+    });
+});
 
-console.log(game())
+ 
+
+
+
+
+
+
+   
